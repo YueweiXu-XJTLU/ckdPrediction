@@ -1,0 +1,44 @@
+Package: ckdPrediction
+Type: Package
+Title: Chronic Kidney Disease Prediction with Machine Learning
+Version: 1.0.0
+Authors@R: 
+    person("Yuewei", "Xu", email = "Yuewei.Xu23@student.xjtlu.edu.cn",
+           role = c("aut", "cre"))
+Description: 
+    ckdPrediction provides a machine-learning pipeline for predicting
+    chronic kidney disease (CKD) from tabular clinical and laboratory
+    measurements in the kidney disease dataset.
+    The package wraps the full workflow, including:
+    (i) data cleaning and processes of the raw CSV file 
+        (missing rate evaluation/missing value processing/train–test splitting);
+    (ii) supervised model fitting with random forest, ridge logistic regression,
+         and support vector machines;
+    (iii) threshold-based new data CKD prediction with trained models;
+    (iv) model evaluation with confusion matrix/ROC,PRC curves/F1-Score based
+         thresholds optimization;
+    (v) model interpretation via feature importance and SHAP-based explanations;
+    (vi) model comparison using multiple performance metrics.
+License: MIT + file LICENSE
+Depends: R (>= 3.5.0)
+Imports: 
+    ggplot2,
+    randomForest,
+    glmnet,
+    e1071,
+    precrec,
+    shapviz,
+    fastshap,
+    h2o,
+    stats,
+    utils
+Suggests:
+    patchwork,
+    knitr,
+    rmarkdown
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.3
+URL: https://github.com/YueweiXu-XJTLU/ckdPrediction
+BugReports: https://github.com/YueweiXu-XJTLU/ckdPrediction/issues
