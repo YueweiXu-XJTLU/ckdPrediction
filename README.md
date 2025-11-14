@@ -212,7 +212,7 @@ plot
 
 ---
 
-## Model performance
+## Model Performance
 
 The plot summarised the robustness of our three models (under default threshold at 0.5).
 
