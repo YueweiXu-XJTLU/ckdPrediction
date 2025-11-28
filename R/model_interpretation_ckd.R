@@ -135,6 +135,7 @@ model_interpretation_importance_ckd <- function(df, model) {
 #' @return A ggplot2 object. A SHAP plot.
 #'
 #' @examples
+#' # This example is time & resource consuming, please wait for a short while.
 #' set.seed(123)
 #' train_df <- readRDS(
 #'   system.file("extdata", "train_df.rds", package="ckdPrediction")
@@ -171,11 +172,12 @@ model_interpretation_importance_ckd <- function(df, model) {
 #'
 #' @export
 model_interpretation_shap_ckd <- function(train_df,
-                                                  test_df,
-                                                  model,
-                                                  visualization_type = 1,
-                                                  visualization_feature = "sc",
-                                                  visualization_row = 1) {
+                                          test_df,
+                                          model,
+                                          visualization_type = 1,
+                                          visualization_feature = "sc",
+                                          visualization_row = 1
+                                          ) {
   feature_labels <- c(
     age="Age", bp="Blood Pressure", sg="Specific Gravity", al="Albumin",
     su="Sugar", rbc="Red Blood Cells", rbc_missing="Red Blood Cells (Missing)",
@@ -219,7 +221,7 @@ model_interpretation_shap_ckd <- function(train_df,
 }
 
 
-#' calculate SHAP Contributions for Models
+#' Calculate SHAP Contributions for Models
 #'
 #' This function computes SHAP-like explanations for BIO215 classifiers. For
 #' random forest, use H2O's Tree SHAP via `h2o.predict_contributions`; for

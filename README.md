@@ -161,6 +161,7 @@ ev$best_threshold$value
 - SHAP
 
   ```R
+  # This example is time & resource consuming, please wait for several minutes.
   set.seed(123)
   train_df <- readRDS(system.file("extdata", "train_df.rds", package="ckdPrediction"))
   test_df <- readRDS(system.file("extdata", "test_df.rds", package="ckdPrediction"))

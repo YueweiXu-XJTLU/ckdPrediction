@@ -2,7 +2,7 @@
 % Please edit documentation in R/model_interpretation_ckd.R
 \name{calculate_shap_ckd}
 \alias{calculate_shap_ckd}
-\title{calculate SHAP Contributions for Models}
+\title{Calculate SHAP Contributions for Models}
 \usage{
 calculate_shap_ckd(train_df, test_df, model)
 }

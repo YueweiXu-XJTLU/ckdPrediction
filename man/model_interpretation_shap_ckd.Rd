@@ -48,6 +48,7 @@ type = 3: SHAP plot for all features and one specific sample
 (need input of \code{visualization_row}).
 }
 \examples{
+# This example is time & resource consuming, please wait for a short while.
 set.seed(123)
 train_df <- readRDS(
   system.file("extdata", "train_df.rds", package="ckdPrediction")
