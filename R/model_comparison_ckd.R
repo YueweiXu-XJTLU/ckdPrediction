@@ -106,9 +106,9 @@ model_comparison_ckd <- function(
   df_long$Model  <- factor(df_long$Model, levels = model_levels)
 
   legend_labels <- c(
-    rf_fit  = "Random Forest",
-    glm_fit = "(Ridge) Logistic Regression",
-    svm_fit = "Support Vector Machine"
+    rf_fit  = paste0("Random Forest (threshold = ", round(threshold_list[1], 2), ")"),
+    glm_fit = paste0("(Ridge) Logistic Regression (threshold = ", round(threshold_list[2], 2), ")"),
+    svm_fit = paste0("Support Vector Machine (threshold = ", round(threshold_list[3], 2), ")")
   )
 
   ggplot(df_long, aes(x = Metric, y = Value,
@@ -131,11 +131,12 @@ model_comparison_ckd <- function(
     theme(
       text             = ggplot2::element_text(face = "bold"),
       plot.title       = ggplot2::element_text(hjust = 0.5, size = 13),
+      axis.text.x = element_text(angle = 30, hjust = 1),
       strip.background = ggplot2::element_rect(fill = "white", colour = NA),
       strip.text       = ggplot2::element_text(size = 10),
       panel.grid.major = ggplot2::element_line(size = 0.2, colour = "#e5e7eb"),
       panel.grid.minor = ggplot2::element_blank(),
-      legend.position  = "none",
-      axis.text.x = element_text(angle = 30, hjust = 1),
+      legend.title     = ggplot2::element_text(size = 9),
+      legend.text      = ggplot2::element_text(size = 8)
       )
 }

@@ -215,7 +215,7 @@ plot
 
 ## Model Performance
 
-The plot summarised the robustness of our three models (under default threshold at 0.5).
+The plot summarised the robustness of our three models (under our recommended thresholds according to F1-Scores).
 
 <img src="inst/img/models.png"> 
 
