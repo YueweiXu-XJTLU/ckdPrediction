@@ -9,13 +9,15 @@
 #'   6. AUC ROC;
 #'   7. AUC PRC;
 #'  under a same threshold for prediction classification.
-#'  In order to compare model performance under a desired threshold.
+#'  In order to compare model performance under desired thresholds.
 #'
 #' @param model_list A list. Contain trained models from `model_train_ckd()`.
 #' @param df A data.frame. Cleaned testing data returned by
 #'   `data_process_ckd()`.
 #' @param threshold A numeric number. Specify decision threshold for model
 #'   in (0, 1).
+#' @param threshold_list A list of numeric number. Specify decision threshold
+#'   for each model in model_list, each number in (0, 1).
 #'
 #' @return A ggplot object. A bar chart to comparison performances among models.
 #'
@@ -45,13 +47,23 @@
 #' @importFrom precrec evalmod auc
 #'
 #' @export
-model_comparison_ckd <- function(model_list, df, threshold = 0.5) {
+model_comparison_ckd <- function(
+    model_list,
+    df,
+    threshold = 0.5,
+    threshold_list = NULL
+    ) {
 
   perf_list <- list()
 
-  for (md in model_list) {
+  if (is.null(threshold_list)) {
+    threshold_list <- rep(threshold, length(model_list))
+  }
+
+  for (i in seq_along(model_list)) {
+    md <- model_list[[i]]
     name <- md$model_type
-    ev   <- model_evaluation_ckd(df, md, threshold = threshold)
+    ev   <- model_evaluation_ckd(df, md, threshold = threshold_list[i])
     m    <- ev$metrics
     auc_tab <- ev$curves$auc
 
@@ -111,14 +123,19 @@ model_comparison_ckd <- function(model_list, df, threshold = 0.5) {
       breaks = model_levels,
       labels = legend_labels[model_levels]
     ) +
-    labs(title = paste0(
-      "Model Performance Comparison (threshold = ",
-      threshold,
-      ")"
-      ),
-                  x = NULL, y = NULL) +
-    theme(axis.text.x =
-                     element_text(angle = 30, hjust = 1),
-                   plot.title =
-                     element_text(hjust = 0.5, face = "bold"))
+    labs(
+      title = "Model Performance Comparison",
+      x = NULL,
+      y = NULL
+      ) +
+    theme(
+      text             = ggplot2::element_text(face = "bold"),
+      plot.title       = ggplot2::element_text(hjust = 0.5, size = 13),
+      strip.background = ggplot2::element_rect(fill = "white", colour = NA),
+      strip.text       = ggplot2::element_text(size = 10),
+      panel.grid.major = ggplot2::element_line(size = 0.2, colour = "#e5e7eb"),
+      panel.grid.minor = ggplot2::element_blank(),
+      legend.position  = "none",
+      axis.text.x = element_text(angle = 30, hjust = 1),
+      )
 }

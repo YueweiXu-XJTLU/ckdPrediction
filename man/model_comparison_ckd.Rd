@@ -4,7 +4,7 @@
 \alias{model_comparison_ckd}
 \title{Compare Performance Metrics of Multiple Models on Same Testing Set}
 \usage{
-model_comparison_ckd(model_list, df, threshold = 0.5)
+model_comparison_ckd(model_list, df, threshold = 0.5, threshold_list = NULL)
 }
 \arguments{
 \item{model_list}{A list. Contain trained models from \code{model_train_ckd()}.}
@@ -14,6 +14,9 @@ model_comparison_ckd(model_list, df, threshold = 0.5)
 
 \item{threshold}{A numeric number. Specify decision threshold for model
 in (0, 1).}
+
+\item{threshold_list}{A list of numeric number. Specify decision threshold
+for each model in model_list, each number in (0, 1).}
 }
 \value{
 A ggplot object. A bar chart to comparison performances among models.
@@ -29,7 +32,7 @@ This function generates a bar plot comparing metrics among models including:
 \item AUC ROC;
 \item AUC PRC;
 under a same threshold for prediction classification.
-In order to compare model performance under a desired threshold.
+In order to compare model performance under desired thresholds.
 }
 }
 \examples{

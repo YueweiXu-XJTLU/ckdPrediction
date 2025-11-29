@@ -72,9 +72,10 @@ model_evaluation_ckd <- function(df, model, threshold = 0.5) {
     ) +
     ggplot2::facet_wrap(~ type_label, nrow = 1, scales = "free") +
     ggplot2::labs(
-      title    = "Receiver Operating Characteristic curve & Precision-Recall curve",
-      x        = NULL,
-      y        = NULL
+      title =
+        "Receiver Operating Characteristic curve & Precision-Recall curve",
+      x = NULL,
+      y = NULL
     ) +
     ggplot2::theme_bw() +
     ggplot2::theme(
