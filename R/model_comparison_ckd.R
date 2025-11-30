@@ -134,7 +134,7 @@ model_comparison_ckd <- function(
       axis.text.x = element_text(angle = 30, hjust = 1),
       strip.background = ggplot2::element_rect(fill = "white", colour = NA),
       strip.text       = ggplot2::element_text(size = 10),
-      panel.grid.major = ggplot2::element_line(size = 0.2, colour = "#e5e7eb"),
+      panel.grid.major = ggplot2::element_line(linewidth = 0.2, colour = "#e5e7eb"),
       panel.grid.minor = ggplot2::element_blank(),
       legend.title     = ggplot2::element_text(size = 9),
       legend.text      = ggplot2::element_text(size = 8)

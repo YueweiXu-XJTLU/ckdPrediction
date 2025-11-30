@@ -61,30 +61,30 @@ model_evaluation_ckd <- function(df, model, threshold = 0.5) {
     levels = c("ROC", "PRC"),
     labels = c("ROC (Recall vs. FPR)", "PRC (Precision vs. Recall)")
   )
-  plot <- ggplot2::ggplot(df_curves, ggplot2::aes(x = x, y = y)) +
-    ggplot2::geom_line(size = 1, colour = "#71b7ed") +
-    ggplot2::geom_abline(
+  plot <- ggplot(df_curves, aes(x = x, y = y)) +
+    geom_line(linewidth = 1, colour = "#71b7ed") +
+    geom_abline(
       data        = subset(df_curves, type == "ROC")[1, , drop = FALSE],
-      ggplot2::aes(slope = 1, intercept = 0),
+      aes(slope = 1, intercept = 0),
       linetype    = "dashed",
       colour      = "#d3d3d3",
       inherit.aes = FALSE
     ) +
-    ggplot2::facet_wrap(~ type_label, nrow = 1, scales = "free") +
-    ggplot2::labs(
+    facet_wrap(~ type_label, nrow = 1, scales = "free") +
+    labs(
       title =
         "Receiver Operating Characteristic curve & Precision-Recall curve",
       x = NULL,
       y = NULL
     ) +
-    ggplot2::theme_bw() +
-    ggplot2::theme(
-      text             = ggplot2::element_text(face = "bold"),
-      plot.title       = ggplot2::element_text(hjust = 0.5, size = 13),
-      strip.background = ggplot2::element_rect(fill = "white", colour = NA),
-      strip.text       = ggplot2::element_text(size = 10),
-      panel.grid.major = ggplot2::element_line(size = 0.2, colour = "#e5e7eb"),
-      panel.grid.minor = ggplot2::element_blank(),
+    theme_bw() +
+    theme(
+      text             = element_text(face = "bold"),
+      plot.title       = element_text(hjust = 0.5, size = 13),
+      strip.background = element_rect(fill = "white", colour = NA),
+      strip.text       = element_text(size = 10),
+      panel.grid.major = element_line(linewidth = 0.2, colour = "#e5e7eb"),
+      panel.grid.minor = element_blank(),
       legend.position  = "none"
     )
   auc  <- precrec::auc(curves_raw)
