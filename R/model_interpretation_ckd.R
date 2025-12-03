@@ -51,7 +51,7 @@ model_interpretation_importance_ckd <- function(df, model) {
     df <- data.frame(Feature = rownames(imp), Importance = imp[, 1])
     title <- "Feature Importance: Random Forest"
   } else if (model$model_type == "glm_fit") {
-    X <- stats::model.matrix(classification ~ . - id, data = train_df)[, -1]
+    X <- stats::model.matrix(classification ~ . - id, data = df)[, -1]
     sds <- apply(X, 2, sd)
     beta <- as.numeric(stats::coef(model$model, s = "lambda.min"))[-1]
     df <- data.frame(Feature = colnames(X), Importance = abs(beta * sds))
@@ -98,7 +98,7 @@ model_interpretation_importance_ckd <- function(df, model) {
     theme(
       plot.title = element_text(hjust = 0.5, face = "bold", size = 14),
       axis.title = element_text(face = "bold", size = 12),
-      axis.text  = element_text(size = 9),
+      axis.text  = element_text(face = "bold", size = 9),
       legend.position = "none"
     )
 
