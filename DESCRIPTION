@@ -31,7 +31,6 @@ Imports:
     precrec,
     shapviz,
     fastshap,
-    h2o,
     stats,
     utils
 Suggests:

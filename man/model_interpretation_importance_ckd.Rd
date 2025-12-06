@@ -20,7 +20,7 @@ This function computes and visualizes feature importance for models.
 Each model uses specific interpretation method for feature importance:
 \enumerate{
 \item Random Forest: MeanDecreaseGini;
-\item (Ridge) Logistic Regression: |beta_j| * sd(x_j)$
+\item (Ridge) Logistic Regression: |beta_j| * sd(x_j)
 \item Support Vector Machine: permutation-based delta-Accuracy.
 }
 }

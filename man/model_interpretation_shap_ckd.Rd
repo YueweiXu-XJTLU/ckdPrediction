@@ -14,10 +14,10 @@ model_interpretation_shap_ckd(
 )
 }
 \arguments{
-\item{train_df}{A data frame. Cleaned testing data returned by
+\item{train_df}{A data frame. Cleaned training data returned by
 \code{data_process_ckd()}.}
 
-\item{test_df}{A data frame. Cleaned training data returned by
+\item{test_df}{A data frame. Cleaned testing data returned by
 \code{data_process_ckd()}.}
 
 \item{model}{A list. Contain model returned by \code{model_train_ckd()}.}

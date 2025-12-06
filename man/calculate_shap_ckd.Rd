@@ -8,12 +8,12 @@ calculate_shap_ckd(train_df, test_df, model)
 }
 \arguments{
 \item{train_df}{A data.frame. Provide cleaned training data returned by
-\code{data_process_bio215()}.}
+\code{data_process_ckd()}.}
 
 \item{test_df}{A data.frame. Provide cleaned testing data for which to
 compute SHAP values.}
 
-\item{model}{A list. Contain a fitted model from \code{model_train_bio215()}
+\item{model}{A list. Contain a fitted model from \code{model_train_ckd()}
 with fields "model" and "model_type"
 in "rf_fit"/"glm_fit"/"svm_fit".}
 }
@@ -22,16 +22,14 @@ A \code{shapviz} object. Represent per-feature contributions (S) and the
 corresponding feature matrix (X) with human-readable labels applied.
 }
 \description{
-This function computes SHAP-like explanations for BIO215 classifiers. For
-random forest, use H2O's Tree SHAP via \code{h2o.predict_contributions}; for
-ridge-logistic (glmnet) and SVM (e1071), use \code{fastshap::explain} with a
-probability \code{pred_wrapper}. Map raw feature names to pretty clinical labels
-and return a \code{shapviz} object for downstream plotting.
+This function computes SHAP-like explanations for CKD classifiers.
+Map raw feature names to pretty clinical labels and return a \code{shapviz}
+object for downstream plotting.
 }
 \examples{
 \dontrun{
 # just an example, this function is not exported by design.
-sv <- calculate_shap_bio215(train_df = train_df,
+sv <- calculate_shap_ckd(train_df = train_df,
                            test_df  = test_df,
                            model    = rf_fit)
 shapviz::sv_importance(sv, kind = "beeswarm", show_numbers = TRUE)

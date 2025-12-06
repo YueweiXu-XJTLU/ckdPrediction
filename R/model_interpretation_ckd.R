@@ -3,7 +3,7 @@
 #' This function computes and visualizes feature importance for models.
 #' Each model uses specific interpretation method for feature importance:
 #'   1. Random Forest: MeanDecreaseGini;
-#'   2. (Ridge) Logistic Regression: |beta_j| * sd(x_j)$
+#'   2. (Ridge) Logistic Regression: |beta_j| * sd(x_j)
 #'   3. Support Vector Machine: permutation-based delta-Accuracy.
 #'
 #' @param df A data.frame. A dataset returned by `data_process_ckd()`,
@@ -116,9 +116,9 @@ model_interpretation_importance_ckd <- function(df, model) {
 #'   type = 3: SHAP plot for all features and one specific sample
 #'     (need input of `visualization_row`).
 #'
-#' @param train_df A data frame. Cleaned testing data returned by
+#' @param train_df A data frame. Cleaned training data returned by
 #'   `data_process_ckd()`.
-#' @param test_df  A data frame. Cleaned training data returned by
+#' @param test_df  A data frame. Cleaned testing data returned by
 #'   `data_process_ckd()`.
 #' @param model A list. Contain model returned by `model_train_ckd()`.
 #' @param visualization_type A numeric number. Represent the plot type:
@@ -223,17 +223,15 @@ model_interpretation_shap_ckd <- function(train_df,
 
 #' Calculate SHAP Contributions for Models
 #'
-#' This function computes SHAP-like explanations for BIO215 classifiers. For
-#' random forest, use H2O's Tree SHAP via `h2o.predict_contributions`; for
-#' ridge-logistic (glmnet) and SVM (e1071), use `fastshap::explain` with a
-#' probability `pred_wrapper`. Map raw feature names to pretty clinical labels
-#' and return a `shapviz` object for downstream plotting.
+#' This function computes SHAP-like explanations for CKD classifiers.
+#' Map raw feature names to pretty clinical labels and return a `shapviz`
+#' object for downstream plotting.
 #'
 #' @param train_df A data.frame. Provide cleaned training data returned by
-#'   `data_process_bio215()`.
+#'   `data_process_ckd()`.
 #' @param test_df A data.frame. Provide cleaned testing data for which to
 #'   compute SHAP values.
-#' @param model A list. Contain a fitted model from `model_train_bio215()`
+#' @param model A list. Contain a fitted model from `model_train_ckd()`
 #'   with fields "model" and "model_type"
 #'   in "rf_fit"/"glm_fit"/"svm_fit".
 #'
@@ -243,7 +241,7 @@ model_interpretation_shap_ckd <- function(train_df,
 #' @examples
 #' \dontrun{
 #' # just an example, this function is not exported by design.
-#' sv <- calculate_shap_bio215(train_df = train_df,
+#' sv <- calculate_shap_ckd(train_df = train_df,
 #'                            test_df  = test_df,
 #'                            model    = rf_fit)
 #' shapviz::sv_importance(sv, kind = "beeswarm", show_numbers = TRUE)
@@ -258,8 +256,6 @@ model_interpretation_shap_ckd <- function(train_df,
 #' @importFrom stats predict model.matrix
 #' @importFrom fastshap explain
 #' @importFrom shapviz shapviz
-#' @importFrom h2o h2o.init h2o.no_progress as.h2o
-#' @importFrom h2o h2o.randomForest h2o.predict_contributions
 #' @importFrom utils capture.output
 calculate_shap_ckd <- function(train_df, test_df, model) {
   feature_labels <- c(
@@ -275,32 +271,52 @@ calculate_shap_ckd <- function(train_df, test_df, model) {
   )
 
   if (model$model_type == "rf_fit") {
-    suppressWarnings(suppressMessages(invisible(capture.output({
-      h2o::h2o.init(nthreads = -1)
-      h2o::h2o.no_progress()
+    if (!requireNamespace("randomForest", quietly = TRUE)) {
+      stop("Package 'randomForest' is required but is not installed.")
+    }
 
-      train_h2o <- h2o::as.h2o(train_df)
-      test_h2o  <- h2o::as.h2o(test_df)
+    xnames <- setdiff(names(train_df), c("classification", "id"))
+    X <- test_df[, xnames, drop = FALSE]
+    for (nm in xnames) {
+      if (is.factor(train_df[[nm]])) {
+        X[[nm]] <- factor(X[[nm]], levels = levels(train_df[[nm]]))
+      } else if (is.character(train_df[[nm]])) {
+        X[[nm]] <- as.character(X[[nm]])
+      } else {
+        X[[nm]] <- as.numeric(as.character(X[[nm]]))
+      }
+    }
 
-      y <- "classification"
-      x <- setdiff(names(train_df), c("classification", "id"))
+    pred_fun <- function(object, newdata) {
+      newdata <- as.data.frame(newdata)
+      newdata <- newdata[, xnames, drop = FALSE]
+      for (nm in xnames) {
+        if (is.factor(train_df[[nm]])) {
+          newdata[[nm]] <- factor(
+            newdata[[nm]],
+            levels = levels(train_df[[nm]])
+          )
+        } else if (is.character(train_df[[nm]])) {
+          newdata[[nm]] <- as.character(newdata[[nm]])
+        } else {
+          newdata[[nm]] <- as.numeric(as.character(newdata[[nm]]))
+        }
+      }
+      p <- stats::predict(
+        object,
+        newdata = newdata,
+        type = "prob"
+      )[ , "ckd"]
+      return(as.numeric(p))
+    }
 
-      rf_h2o <- h2o::h2o.randomForest(
-        x = x,
-        y = y,
-        training_frame = train_h2o,
-        ntrees = 500,
-        max_depth = 10,
-        seed = 123,
-        balance_classes = TRUE
-      )
-
-      shap_values <- h2o::h2o.predict_contributions(rf_h2o, test_h2o)
-      shap_df <- as.data.frame(shap_values)
-    }))))
-
-    X <- as.data.frame(test_df[, x])
-    sv <- shapviz::shapviz(rf_h2o, X_pred = test_h2o, X = X)
+    sh <- fastshap::explain(
+      object       = model$model,
+      X            = X,
+      pred_wrapper = pred_fun,
+      nsim         = 50
+    )
+    sv <- shapviz::shapviz(sh, X = X)
   } else if (model$model_type == "glm_fit") {
     pred_fun <- function(object, newdata) {
       as.numeric(stats::predict(object,
@@ -310,7 +326,7 @@ calculate_shap_ckd <- function(train_df, test_df, model) {
     }
     X <- stats::model.matrix(
       classification ~ . - id, data = test_df
-      )[, -1, drop = FALSE]
+    )[, -1, drop = FALSE]
     sh <- fastshap::explain(
       object = model$model,
       X = as.data.frame(X),
