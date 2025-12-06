@@ -5,6 +5,8 @@
 **ckdPrediction** implements a complete, reproducible machine-learning workflow
 for chronic kidney disease (CKD) prediction based on the **Kidney Disease Dataset**.
 
+**Disclaimer:** The R package is only for study purpose, and **must not be used** for any real clinical decision making.
+
 ---
 
 ## Dataset

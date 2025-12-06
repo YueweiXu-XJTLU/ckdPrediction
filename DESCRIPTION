@@ -19,6 +19,8 @@ Description:
          thresholds optimization;
     (v) model interpretation via feature importance and SHAP-based explanations;
     (vi) model comparison using multiple performance metrics.
+    Disclaimer: The R package is only for study purpose, 
+    and must not be used for any real clinical decision making.
 License: MIT + file LICENSE
 Depends: R (>= 3.5.0)
 Imports: 
