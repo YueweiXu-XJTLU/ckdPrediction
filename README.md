@@ -12,7 +12,7 @@ for chronic kidney disease (CKD) prediction based on the **Kidney Disease Datase
 ## Dataset
 
 The package is designed around the publicly available [**Kidney Disease
-Dataset** hosted on Kaggle by Akshay Singh](https://www.kaggle.com/datasets/akshayksingh/kidney-disease-dataset) (tabular clinical and laboratory measurements with a binary outcome
+Dataset**](https://www.kaggle.com/datasets/akshayksingh/kidney-disease-dataset) hosted on Kaggle by Akshay Singh (tabular clinical and laboratory measurements with a binary outcome
 indicating CKD vs non-CKD).
 
 The data set contains 26 features for each sample. Explanation for all features can be found in this essay.
