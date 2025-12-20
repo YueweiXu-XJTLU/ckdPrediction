@@ -106,9 +106,15 @@ model_comparison_ckd <- function(
   df_long$Model  <- factor(df_long$Model, levels = model_levels)
 
   legend_labels <- c(
-    rf_fit  = paste0("Random Forest (threshold = ", round(threshold_list[1], 2), ")"),
-    glm_fit = paste0("(Ridge) Logistic Regression (threshold = ", round(threshold_list[2], 2), ")"),
-    svm_fit = paste0("Support Vector Machine (threshold = ", round(threshold_list[3], 2), ")")
+    rf_fit  = paste0(
+      "Random Forest (", round(threshold_list[[1]], 2), ")"
+      ),
+    glm_fit = paste0(
+      "Ridge Logistic Regression (", round(threshold_list[[2]], 2), ")"
+      ),
+    svm_fit = paste0(
+      "Support Vector Machine (", round(threshold_list[[3]], 2), ")"
+      )
   )
 
   ggplot(df_long, aes(x = Metric, y = Value,
@@ -126,7 +132,8 @@ model_comparison_ckd <- function(
     labs(
       title = "Model Performance Comparison",
       x = NULL,
-      y = NULL
+      y = NULL,
+      fill = "Model (Threshold)"
       ) +
     theme(
       text             = ggplot2::element_text(face = "bold"),
@@ -134,7 +141,9 @@ model_comparison_ckd <- function(
       axis.text.x = element_text(angle = 30, hjust = 1),
       strip.background = ggplot2::element_rect(fill = "white", colour = NA),
       strip.text       = ggplot2::element_text(size = 10),
-      panel.grid.major = ggplot2::element_line(linewidth = 0.2, colour = "#e5e7eb"),
+      panel.grid.major = ggplot2::element_line(
+        linewidth = 0.2, colour = "#e5e7eb"
+        ),
       panel.grid.minor = ggplot2::element_blank(),
       legend.title     = ggplot2::element_text(size = 9),
       legend.text      = ggplot2::element_text(size = 8)
